@@ -5,18 +5,20 @@ Sendgrid Events is a PHP script which integrates a MySQL Database with the
 
 This process will log any of the following: delivered, bounced, delayed, clicked, etc., to a database. SendGrid will post events to a server of your choosing.
 
-Note that for performance reasons, you'll probably want to configure your Event API to batch events. The bad news is that SendGrid POSTs newline-separate JSON objects, rather than a JSON array.
+Note that for performance reasons, you'll probably want to configure your Event API to batch events, this is not required. The bad news is that SendGrid POSTs newline-separate JSON objects, rather than a JSON array.
+
+If you would like to be notified via email regarding any bounced, blocked or erroneous delivery attempt; setup the _cron_ process below, to execute the ```bounces_monitor.php``` script.  
 
 
 ## Installation
 
 1. Execute the ```sendgrid_events.sql``` file.
 
-2. You'll need to configure your SendGrid account to [enable the Event API](http://sendgrid.com/docs/API_Reference/Webhooks/event.html).
+2. You will need to configure your SendGrid account to [enable the Event API](http://sendgrid.com/docs/API_Reference/Webhooks/event.html).
 
 3. Update the ```db.class.php``` file with your database credentials so the data posted from SendGrid can be logged.
 
-4. Setup a cron process to send out an email if there are any events SendGrid might need to have cleared. If a message is bouncing SendGrid will log this status and not attempt to deliver the email again until it is cleared.
+4. Setup a _cron_ process to send out an email if there are any events SendGrid might need to have cleared. If a message is bouncing SendGrid will log this status and not attempt to deliver the email again until it is cleared.
 ```20 10 * * 0-6 /usr/bin/php /path/to/cron/bounces_monitor.php > /dev/null 2>&1```
 
 
