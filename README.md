@@ -10,13 +10,17 @@ Note that for performance reasons, you'll probably want to configure your Event 
 
 ## Installation
 
-Execute the ```sendgrid_events.sql``` file.
+1. Execute the ```sendgrid_events.sql``` file.
 
-You'll need to configure your SendGrid account to [enable the Event API](http://sendgrid.com/docs/API_Reference/Webhooks/event.html).
+2. You'll need to configure your SendGrid account to [enable the Event API](http://sendgrid.com/docs/API_Reference/Webhooks/event.html).
 
-Update the ```db.class.php``` file with your database credentials so the data posted from SendGrid can be logged.
+3. Update the ```db.class.php``` file with your database credentials so the data posted from SendGrid can be logged.
 
-Enjoy!
+4. Setup a cron process to send out an email if there are any events SendGrid might need to have cleared. If a message is bouncing SendGrid will log this status and not attempt to deliver the email again until it is cleared.
+```20 10 * * 0-6 /usr/bin/php /path/to/cron/bounces_monitor.php > /dev/null 2>&1```
+
+
+5. **Enjoy!**
 
 
 ## Contributing
