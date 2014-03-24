@@ -1,5 +1,4 @@
 <?php
-
 class Sendgrid 
 {
 
@@ -35,12 +34,9 @@ class Sendgrid
 
 	public function ParseNotificationData() {
 
-	/*
-	Logging the notifications sent from SendGrid, improving automatted responses.
-	*/
+	/* Logging the notifications sent from SendGrid, improving automatted responses. */
 
-		foreach ( $this->data as $d )
-		{
+		foreach ( $this->data as $d ) {
 
 				$this->email 		= strtolower($d->email); //required to save data
 				$this->timestamp  	= $this->UnixTimestamp( $d->timestamp );
@@ -54,7 +50,7 @@ class Sendgrid
 				$this->reason  		= $d->reason;
 				$this->url  		= $d->url;
 				$this->smtp_id 		= $d->{"smtp-id"};
-				$this->ip  			= sprintf('%u', ip2long($d->ip));
+				$this->ip 			= sprintf('%u', ip2long($d->ip));
 				$this->user_agent 	= $d->useragent;
 
 				// These emails don't need to be logged.
