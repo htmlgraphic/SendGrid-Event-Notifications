@@ -80,7 +80,7 @@ class Sendgrid
 											'smtp_id' 		=> $this->smtp_id,
 											'ip' 			=> $this->ip,
 											'user_agent' 	=> $this->user_agent,
-											'raw_data'		=> serialize($this->raw_data),
+											'raw_data'		=> serialize(json_encode($d)),
 											);
 			    } // End skip
 		}
