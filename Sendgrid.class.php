@@ -53,7 +53,7 @@ class Sendgrid
 				$this->response 	= $d->response;
 				$this->reason  		= $d->reason;
 				$this->url  		= $d->url;
-				$this->smtp_id 		= $d->smtp-id;
+				$this->smtp_id 		= $d->{"smtp-id"};
 				$this->ip  			= sprintf('%u', ip2long($d->ip));
 				$this->user_agent 	= $d->useragent;
 
