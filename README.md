@@ -18,18 +18,18 @@ If you would like to be notified via email regarding any bounced, blocked or err
 
 3. Update database credentials found in the ```sendgird-json.php``` file.
 
-**(optional)**
-
-4. Setup a _cron_ process to send out an email if there are any events SendGrid might need to have cleared. If a message is bouncing SendGrid will log this status and not attempt to deliver the email again until it is cleared.
-```20 10 * * 0-6 /usr/bin/php /path/to/cron/bounces_monitor.php > /dev/null 2>&1```
+ 	**Enjoy!**
 
 
-5. **Enjoy!**
+4. _(optional)_  A _cron_ process can be setup to send out a email notice if there is any events that might need attention. If a message is bouncing SendGrid will log this status and not attempt to deliver the email again until it is cleared.
+
+	```20 10 * * 0-6 /usr/bin/php /path/to/cron/bounces_monitor.php > /dev/null 2>&1```
+
 
 
 ## Contributing
 
-1. Fork it
+1. [Fork it](https://github.com/htmlgraphic/SendGrid-Event-Notifications/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
