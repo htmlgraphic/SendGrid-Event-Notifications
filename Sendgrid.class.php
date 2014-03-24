@@ -64,20 +64,20 @@ class Sendgrid
 				if (!$this->skip) { 
 
 					// Build array to loop
-					$this->dataArray[] = array('email' 		=> $this->email,
-											'timestamp' 	=> $this->timestamp,
-											'category' 		=> $this->category, 
-											'attempt' 		=> $this->attempt,
-											'event' 		=> $this->event, 
-											'type' 			=> $this->type, 
-											'response' 		=> $this->response,
-											'reason' 		=> $this->reason, 
-											'url' 			=> $this->url,
-											'smtp_id' 		=> $this->smtp_id,
-											'ip' 			=> $this->ip,
-											'user_agent' 	=> $this->user_agent,
-											'raw_data'		=> serialize(json_encode($d)),
-											);
+					$this->dataArray[] = array('email' 	=> $this->email,
+										'timestamp' => $this->timestamp,
+										'category' 	=> $this->category, 
+										'attempt' 	=> $this->attempt,
+										'event' 	=> $this->event, 
+										'type' 		=> $this->type, 
+										'response' 	=> $this->response,
+										'reason' 	=> $this->reason, 
+										'url' 		=> $this->url,
+										'smtp_id' 	=> $this->smtp_id,
+										'ip' 		=> $this->ip,
+										'user_agent'=> $this->user_agent,
+										'raw_data'	=> serialize(json_encode($d)),
+										);
 			    } // End skip
 		}
 	}
