@@ -5,31 +5,19 @@ define('EMAIL_FORMAT', '/^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i');
 class Sendgrid 
 {
 
-	public $email;
-	public $timestamp;
-	public $category;
-	public $sender;
-	public $attempt;
-	public $event;
-	public $type;
-	public $response;
-	public $reason;
-	public $url;
-
 	public $dataArray;
 	public $skip = false;
 
 	function __construct(){  
-		if(isset($_POST['email'])) { $this->email  			= strtolower($_POST['email']); } //required to save data
-		if(isset($_POST['timestamp'])) { $this->timestamp  	= $this->UnixTimestamp($_POST['timestamp']); }
-		if(isset($_POST['category'])) { $this->category  	= $_POST['category']; }
-		//if(isset($_POST['sender'])) { $this->sender  		= strtolower($_POST['sender']); } // from X-Envelope-From email variable 
-		if(isset($_POST['attempt'])) { $this->attempt  		= intval($_POST['attempt']); }// number of attempts tried by SendGrid
-		if(isset($_POST['event'])) { $this->event  			= strtolower($_POST['event']); }
-		if(isset($_POST['type'])) { $this->type  			= $_POST['type']; }
-		if(isset($_POST['response'])) { $this->response  	= $_POST['response']; }
-		if(isset($_POST['reason'])) { $this->reason  		= $_POST['reason']; }
-		if(isset($_POST['url'])) { $this->url  				= $_POST['url']; }
+
+		// Parse data sent via post, useful example: http://hookdebug.sendgrid.com
+		$this->raw_data = (file_get_contents('php://input'));
+		$this->data = json_decode($this->raw_data);
+
+        // Setup timezone timestamp, if needed
+        $this->site = new StdClass;
+        $this->site->date = new DateTime();
+        $this->site->date->setTimezone(new DateTimeZone('EST'));
     }
 
 
@@ -48,43 +36,55 @@ class Sendgrid
 
 
 	public function ParseNotificationData() {
-/*
 
-Logging the notifications sent from SendGrid, improving automatted responses.
+	/*
+	Logging the notifications sent from SendGrid, improving automatted responses.
+	*/
 
-*/
+		foreach ( $this->data as $d )
+		{
 
-	// These emails don't need to be logged.
-	switch ($this->email) {
-	    case 'user@example.com':
-	        $this->skip = true;
-	        break;
-	}
+				$this->email 		= strtolower($d->email); //required to save data
+				$this->timestamp  	= $this->UnixTimestamp( $d->timestamp );
+				$this->category  	= json_encode($d->category);
+				// Future addon: Custom Postfix X-Envelope-From email variable 
+				//if(isset($d['sender)) { $this->sender  	= strtolower($d['sender); }
+				$this->attempt  	= intval($d->attempt); // number of attempts tried by SendGrid
+				$this->event  		= strtolower($d->event);
+				$this->type  		= $d->type;
+				$this->response 	= $d->response;
+				$this->reason  		= $d->reason;
+				$this->url  		= $d->url;
+				$this->smtp_id 		= $d->smtp-id;
+				$this->ip  			= sprintf('%u', ip2long($d->ip));
+				$this->user_agent 	= $d->useragent;
 
+				// These emails don't need to be logged.
+				$ignore_email = array('john.doe@gmail.com','user2@example.com','user3@example.com');
+				if (in_array($this->email, $ignore_email)) {
+				    $this->skip = true;
+				} else {
+					$this->skip = false;
+				}
+				
+				if (!$this->skip) { 
 
-	
-	if (!$this->skip) { 
-
-		if (isset($this->email)) {
-			if (preg_match(EMAIL_FORMAT, $this->email)) {
-			$this->skip = false;
-			}	
+					// Build array to loop
+					$this->dataArray[] = array('email' 		=> $this->email,
+											'timestamp' 	=> $this->timestamp,
+											'category' 		=> $this->category, 
+											'attempt' 		=> $this->attempt,
+											'event' 		=> $this->event, 
+											'type' 			=> $this->type, 
+											'response' 		=> $this->response,
+											'reason' 		=> $this->reason, 
+											'url' 			=> $this->url,
+											'smtp_id' 		=> $this->smtp_id,
+											'ip' 			=> $this->ip,
+											'user_agent' 	=> $this->user_agent,
+											'raw_data'		=> serialize($this->raw_data),
+											);
+			    } // End skip
 		}
-
-		$this->dataArray = array('email' 		=> $this->email, 
-								'attempt' 		=> $this->attempt, 
-								'timestamp' 	=> $this->timestamp,
-								'category' 		=> $this->category, 
-								'event' 		=> $this->event, 
-								'type' 			=> $this->type, 
-								'response' 		=> $this->response,
-								'reason' 		=> $this->reason, 
-								'url' 			=> $this->url
-								);
-    } // End skip
-
 	}
-
 }
-
-?>

@@ -14,13 +14,13 @@
 	// Check if the post is coming from Checkfront servers
 	if (strstr($_SERVER['HTTP_USER_AGENT'], 'SendGrid')) {
 
+		$db = new MysqliDb('localhost', 'username', 'P@$sw0rD', 'domain_com');
+
 		$notifications = new Sendgrid();
 		$notifications->ParseNotificationData();
-	
-		if ($notifications->skip !== true) {
-		// skip the logging of the data if the email address returned is not correctly formatted
-		$db = new DB();
-		$db->write('sendgrid_events', $notifications->dataArray);
+
+		foreach ( $notifications->dataArray as $data ) {
+			$db->insert('sendgrid_events', $data);
 		}
 		
 		echo "Ok";
