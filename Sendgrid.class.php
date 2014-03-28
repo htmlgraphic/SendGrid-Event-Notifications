@@ -42,7 +42,7 @@ class Sendgrid
 				$this->email 		= strtolower($d->email); //required to save data
 				$this->timestamp  	= $this->UnixTimestamp( $d->timestamp );
 				if ($d->category) {
-					$this->category = str_replace("'", "\u2027", $d->category; // replace any single quotes, w/ UTF char
+					$this->category = str_replace("'", "\u2027", $d->category); // replace any single quotes, w/ UTF char
 					$this->category = json_encode($this->category);
 				}
 				// Future addon: Custom Postfix X-Envelope-From email variable 
