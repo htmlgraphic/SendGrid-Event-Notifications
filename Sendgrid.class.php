@@ -8,6 +8,7 @@ class Sendgrid
 	function __construct(){  
 
 		// Parse data sent via post, useful example: http://hookdebug.sendgrid.com
+		// Helpful http://bit.ly/escape-single-quotes
 		$this->raw_data = (file_get_contents('php://input'));
 		$this->data = json_decode($this->raw_data);
 
@@ -40,7 +41,10 @@ class Sendgrid
 
 				$this->email 		= strtolower($d->email); //required to save data
 				$this->timestamp  	= $this->UnixTimestamp( $d->timestamp );
-				$this->category  	= json_encode($d->category);
+				if ($d->category) {
+					$this->category = str_replace("'", "\u2027", $d->category; // replace any single quotes, w/ UTF char
+					$this->category = json_encode($this->category);
+				}
 				// Future addon: Custom Postfix X-Envelope-From email variable 
 				//if(isset($d['sender)) { $this->sender  	= strtolower($d['sender); }
 				$this->attempt  	= intval($d->attempt); // number of attempts tried by SendGrid
